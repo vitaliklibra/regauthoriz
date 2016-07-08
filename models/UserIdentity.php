@@ -40,6 +40,6 @@ class UserIdentity extends User implements IdentityInterface
 
   public function validatePassword($password)
   {
-  	return $this->password === md5($password);
+    return $this->password === Yii::$app->security->generatePasswordHash($password);
   }
 }

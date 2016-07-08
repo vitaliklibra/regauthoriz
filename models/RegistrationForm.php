@@ -21,8 +21,7 @@ class RegistrationForm extends Model
       ['password', 'filter', 'filter' => 'trim'],
       ['phone', 'match', 'pattern' => '/\+38\d{10,10}$/'],
       ['email', 'email'],
-      //['email', 'unique'],
-      //['email', 'validateEmail'],
+      ['email', 'validateEmail'],
       ['password', 'string', 'length'=>[6]],
       ['verifypassword', 'compare', 'compareAttribute'=>'password', 'operator'=>'==='],
     ];
@@ -41,6 +40,9 @@ class RegistrationForm extends Model
 
   public function validateEmail($attribute, $params)
   {
-    //
+    if (UserIdentity::findByEmail($this->email))
+    {
+      $this->addError($attribute, 'This E-mail is already registered in the database.');
+    }
   }
 }

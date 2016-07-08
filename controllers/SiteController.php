@@ -79,27 +79,34 @@ class SiteController extends Controller
 
   public function actionRegistration()
   {
+    $model = new RegistrationForm();
+
     if (Yii::$app->request->post())
     {
-      $modeluser = Yii::$app->request->post()['RegistrationForm'];
 
+      if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))
+      {
+         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+         return \yii\widgets\ActiveForm::validate($model);
+      }
+
+      $modeluser = Yii::$app->request->post()['RegistrationForm'];
+      
       $newUser = new User();
       $newUser->loadDefaultValues();
       $newUser->name = $modeluser['name'];
       $newUser->email = $modeluser['email'];
       $newUser->phone = $modeluser['phone'];
-      $newUser->password = md5($modeluser['password']);
+      $newUser->password = Yii::$app->security->generatePasswordHash($modeluser['password']);
       $newUser->save();
 
-      if (Yii::$app->user->login(UserIdentity::findByEmail($modeluser['email'])))
+      if (Yii::$app->user->login(UserIdentity::findByEmail($newUser->email)))
       {
         return $this->goHome();
       }
 
       return $this->goBack();
     }
-
-    $model = new RegistrationForm();
 
     return $this->render('registration', ['model' => $model]);
   }

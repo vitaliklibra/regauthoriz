@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php $form = ActiveForm::begin([
     'id' => 'registration-form',
     'options' => ['class' => 'form-horizontal'],
-    //'enableAjaxValidation' => true,
+    'enableAjaxValidation' => true,
     'fieldConfig' => [
   		'template' => "{label}\n<div class=\"col-lg-4\">{input}</div>\n<div class=\"col-lg-6\">{error}</div>",
       'labelOptions' => ['class' => 'col-lg-2 control-label'],
